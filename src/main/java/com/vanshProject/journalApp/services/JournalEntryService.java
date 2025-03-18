@@ -39,14 +39,30 @@ public class JournalEntryService {
         return journalEntryRepo.findById(id);
     }
 
+    @Transactional
     public void deleteById(ObjectId id, String userName){
-        User user = userService.findByUserName(userName);
-        user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-        journalEntryRepo.deleteById(id);
-        userService.saveUser(user);
+        try {
+            User user = userService.findByUserName(userName);
+            boolean removed = user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+            if(removed){
+                journalEntryRepo.deleteById(id);
+                userService.saveUser(user);
+            }
+        }catch (Exception e){
+            throw new RuntimeException("an error occurred" + e);
+        }
+
     }
-    public void deleteAll(){
-        journalEntryRepo.deleteAll();
+    @Transactional
+    public void deleteAllEntriesOfUser(String username){
+        try {
+            User user = userService.findByUserName(username);
+            user.getJournalEntries().clear();
+            journalEntryRepo.deleteAll();
+            userService.saveUser(user);
+        } catch(Exception e){
+            throw new RuntimeException("error occurred " + e);
+        }
     }
 
 }
