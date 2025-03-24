@@ -1,8 +1,10 @@
 package com.vanshProject.journalApp.controllers;
 
+import com.vanshProject.journalApp.apiResponse.WeatherResponse;
 import com.vanshProject.journalApp.entities.JournalEntry;
 import com.vanshProject.journalApp.entities.User;
 import com.vanshProject.journalApp.services.UserService;
+import com.vanshProject.journalApp.services.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +23,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping
-    public ResponseEntity<?> getUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.findByUserName(userName);
-        if(user != null){
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    @Autowired
+    WeatherService weatherService;
     @DeleteMapping
     public ResponseEntity<?> deleteUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,5 +44,20 @@ public class UserController {
         userService.saveNewUser(userInDb);
         return new ResponseEntity<>(userInDb, HttpStatus.OK);
     }
+
+    @GetMapping
+    public ResponseEntity<?> getWeather(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        WeatherResponse weatherResponse = weatherService.getWeather("Meerut");
+        String greetings = "";
+        if(weatherResponse != null){
+            greetings = " weather feels like " + weatherResponse.getCurrent().getTempC();
+        }
+
+
+        return new ResponseEntity<>( "Hi " + userName + greetings, HttpStatus.OK);
+    }
+
 
 }

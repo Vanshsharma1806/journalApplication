@@ -1,5 +1,6 @@
 package com.vanshProject.journalApp.controllers;
 
+import com.vanshProject.journalApp.Cache.AppCache;
 import com.vanshProject.journalApp.entities.User;
 import com.vanshProject.journalApp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class PublicController {
     @Autowired
     UserService userService;
+
+    @Autowired
+    AppCache appCache;
 
     @GetMapping("health-check")
     public String checkHealth(){
@@ -29,5 +33,10 @@ public class PublicController {
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/clear-app-cache")
+    public void clearAppCache(){
+        appCache.init();
     }
 }
