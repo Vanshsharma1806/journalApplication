@@ -20,6 +20,10 @@ public class User {
     private String userName;
     @NonNull
     private String password;
+
+    private String email;
+    private boolean sentimentAnalysis;
+
     @DBRef
     private List<JournalEntry> journalEntries = new ArrayList<>();
 
