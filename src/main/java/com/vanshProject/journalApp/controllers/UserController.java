@@ -1,7 +1,6 @@
 package com.vanshProject.journalApp.controllers;
 
 import com.vanshProject.journalApp.apiResponse.WeatherResponse;
-import com.vanshProject.journalApp.entities.JournalEntry;
 import com.vanshProject.journalApp.entities.User;
 import com.vanshProject.journalApp.services.UserService;
 import com.vanshProject.journalApp.services.WeatherService;
@@ -11,11 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.Path;
-import java.security.PublicKey;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
